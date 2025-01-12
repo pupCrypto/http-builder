@@ -5,9 +5,20 @@ class Builder {
         }
     }
     
-    // TODO: add doc-string
+    /**
+     * Returns a Buffer object
+     * @returns {Buffer}
+     */
     asBuffer() {
-        throw new Error('Not implemented');
+        return Buffer.from(this.asString());
+    }
+
+    /**
+     * Returns a string
+     * @returns {string}
+     */
+    asString() {
+        throw new Error('Not Implemented');
     }
 }
 
