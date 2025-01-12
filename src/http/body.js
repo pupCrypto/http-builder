@@ -8,7 +8,7 @@ class JsonBody extends Builder {
         this._body = obj || null;
     }
 
-    asString() {
+    toString() {
         if (!this._body) {
             return EMPTY_STRING;
         }
@@ -17,12 +17,12 @@ class JsonBody extends Builder {
 }
 
 class PlainBody extends Builder {
-    constructor() {
+    constructor(data = EMPTY_STRING) {
         super();
-        this._body = EMPTY_STRING;
+        this._body = data;
     }
 
-    asString() {
+    toString() {
         return this._body;
     }
 }

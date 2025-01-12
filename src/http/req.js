@@ -1,6 +1,6 @@
 const { RequestStartLine } = require('./start-line');
 const { Headers } = require('./headers');
-const { PlainBody } = require('./body');
+const { JsonBody, PlainBody } = require('./body');
 const Builder = require('../builder');
 const { HTTP_LINE_BREAK } = require('../constants');
 
@@ -34,16 +34,26 @@ class HttpRequest extends Builder {
         return this._body;
     }
     set body(body) {
-        // check type
+        if (typeof body === 'string' || (typeof body == 'object' && body instanceof String)) {
+            body = new PlainBody(body);
+        } else {
+            body = new JsonBody(body);
+        }
+        if (body instanceof PlainBody) {
+            this.setHeader('Content-Type', 'text/plain');
+        } else if (body instanceof JsonBody) {
+            this.setHeader('Content-Type', 'application/json');
+        }
+        this.setHeader('Content-Length', body.toString().length);
         this._body = body;
     }
 
-    asString() {
+    toString() {
         return (
-            this.startLine.asString() +
-            this.headers.asString() +
+            this.startLine.toString() +
+            this.headers.toString() +
             HTTP_LINE_BREAK +
-            this.body.asString()
+            this.body.toString()
         );
     }
 

@@ -9,15 +9,15 @@ class Builder {
      * Returns a Buffer object
      * @returns {Buffer}
      */
-    asBuffer() {
-        return Buffer.from(this.asString());
+    toBuffer() {
+        return Buffer.from(this.toString());
     }
 
     /**
      * Returns a string
      * @returns {string}
      */
-    asString() {
+    toString() {
         throw new Error('Not Implemented');
     }
 }

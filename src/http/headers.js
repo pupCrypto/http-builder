@@ -1,5 +1,5 @@
 const Builder = require('../builder');
-const { HTTP_LINE_BREAK } = require('../constants');
+const { HTTP_LINE_BREAK, EMPTY_STRING } = require('../constants');
 
 
 class Header extends Builder {
@@ -14,8 +14,8 @@ class Header extends Builder {
         this.value = value;
     }
 
-    asString() {
-        return `${this.name}: ${this.value}\r\n`;
+    toString() {
+        return `${this.name}: ${this.value}`;
     }
 }
 
@@ -41,11 +41,14 @@ class Headers extends Builder {
     findHeader(name) {
         return this._headers.find((header) => header.name === name.toLowerCase());
     }
-    asList() {
+    toList() {
         return Array.from(this._headers);
     }
-    asString() {
-        return this._headers.map(header => header.asString()).join(HTTP_LINE_BREAK);
+    toString() {
+        if (this._headers.length === 0) {
+            return EMPTY_STRING;
+        }
+        return this._headers.map(header => header.toString()).join(HTTP_LINE_BREAK) + HTTP_LINE_BREAK;
     }
 }
 

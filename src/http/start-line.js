@@ -20,7 +20,7 @@ class ResponseStartLine extends Builder {
         return this._statusText;
     }
 
-    asString() {
+    toString() {
         return `HTTP/${this._version} ${this._statusCode} ${this._statusText}\r\n`;
     }
 }
@@ -44,9 +44,9 @@ class RequestStartLine extends Builder {
     }
 
     asBuffer() {
-        return Buffer.from(this.asString());
+        return Buffer.from(this.toString());
     }
-    asString() {
+    toString() {
         return `${this._method.toUpperCase()} / HTTP/${this._version}\r\n`;
     }
 }

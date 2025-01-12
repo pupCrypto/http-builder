@@ -40,13 +40,13 @@ describe('HttpRequestBuilder building', () => {
         const request = new HttpRequest();
         request.setHeader('Content-Type', 'application/json');
         request.startLine.method = 'POST';
-        assert.equal(request.asString(), 'POST / HTTP/1.0\r\ncontent-type: application/json\r\n\r\n');
+        assert.equal(request.toString(), 'POST / HTTP/1.0\r\ncontent-type: application/json\r\n\r\n');
     });
     it('should build request with test body as string', () => {
         const request = new HttpRequest();
         request.setHeader('Content-Type', 'application/json');
         request.startLine.method = 'POST';
         request.body = new JsonBody({ test: 'test' });
-        assert.equal(request.asString(), 'POST / HTTP/1.0\r\ncontent-type: application/json\r\n\r\n{"test":"test"}');
+        assert.equal(request.toString(), 'POST / HTTP/1.0\r\ncontent-type: application/json\r\n\r\n{"test":"test"}');
     });
 });

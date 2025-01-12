@@ -21,11 +21,11 @@ describe('HttpResponseBuilder start line', () => {
 describe('HttpResponseBuilder building', () => {
     it('should build response with empty body as string', () => {
         const response = new HttpResponse();
-        assert.equal(response.asString(), 'HTTP/1.0 200 OK\r\n\r\n');
+        assert.equal(response.toString(), 'HTTP/1.0 200 OK\r\n\r\n');
     });
     it('should build response with test body as string', () => {
         const response = new HttpResponse();
         response.body = new JsonBody({ test: 'test' });
-        assert.equal(response.asString(), 'HTTP/1.0 200 OK\r\n\r\n{"test":"test"}');
+        assert.equal(response.toString(), 'HTTP/1.0 200 OK\r\ncontent-type: application/json\r\ncontent-length: 15\r\n\r\n{"test":"test"}');
     });
 });

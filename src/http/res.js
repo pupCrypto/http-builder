@@ -1,4 +1,4 @@
-const { PlainBody } = require('./body');
+const { JsonBody, PlainBody } = require('./body');
 const { ResponseStartLine } = require('./start-line');
 const { Headers } = require('./headers');
 const Builder = require('../builder');
@@ -33,16 +33,31 @@ class HttpResponse extends Builder {
         return this._body;
     }
     set body(body) {
-        // check type
+        if (typeof body === 'object') {
+            if (body instanceof String) {
+                body = new PlainBody(body);
+            } else if (!body instanceof JsonBody && !body instanceof PlainBody) {
+                body = new JsonBody(body);
+            }
+        } else if (typeof body === 'string') {
+            body = new PlainBody(body);
+        }
+
+        if (body instanceof PlainBody) {
+            this.setHeader('Content-Type', 'text/plain');
+        } else if (body instanceof JsonBody) {
+            this.setHeader('Content-Type', 'application/json');
+        }
+        this.setHeader('Content-Length', Buffer.byteLength(body.toString()));
         this._body = body;
     }
 
-    asString() {
+    toString() {
         return (
-            this.startLine.asString() +
-            this.headers.asString() +
+            this.startLine.toString() +
+            this.headers.toString() +
             HTTP_LINE_BREAK +
-            this.body.asString()
+            this.body.toString()
         );
     }
 }
