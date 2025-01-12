@@ -1,6 +1,8 @@
 const { PlainBody } = require('./body');
 const { ResponseStartLine } = require('./start-line');
+const { Headers } = require('./headers');
 const Builder = require('../builder');
+const { HTTP_LINE_BREAK } = require('../constants');
 
 
 class HttpResponse extends Builder {
