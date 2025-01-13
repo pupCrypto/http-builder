@@ -1,16 +1,27 @@
 const { RequestStartLine } = require('./start-line');
 const { Headers } = require('./headers');
 const { JsonBody, PlainBody } = require('./body');
-const Builder = require('../builder');
+const { HttpBuilder } = require('./builder');
 const { HTTP_LINE_BREAK } = require('../constants');
 
 
-class HttpRequest extends Builder {
+class HttpRequest extends HttpBuilder {
     constructor() {
         super();
         this._startLine = new RequestStartLine();
         this._headers = new Headers();
         this._body = new PlainBody();
+    }
+
+    static parseString(data) {
+        const startLine = RequestStartLine.parseString(data);
+        const headers = Headers.parseString(data);
+        const body = PlainBody.parseString(data);
+        return new HttpRequest(startLine, headers, body);
+    }
+
+    static parseObj(data) {
+        throw new Error('Not Implemented');
     }
 
     /**

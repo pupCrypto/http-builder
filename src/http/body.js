@@ -1,8 +1,8 @@
-const Builder = require('../builder');
-const { EMPTY_STRING } = require('../constants');
+const { HttpBuilder } = require('./builder');
+const { EMPTY_STRING, HTTP_LINE_BREAK } = require('../constants');
 
 
-class JsonBody extends Builder {
+class JsonBody extends HttpBuilder {
     constructor(obj) {
         super();
         this._body = obj || null;
@@ -14,9 +14,12 @@ class JsonBody extends Builder {
         }
         return JSON.stringify(this._body);
     }
+    static parseString(data) {
+        return new JsonBody(JSON.parse(data.split(HTTP_LINE_BREAK).at(-1)));
+    }
 }
 
-class PlainBody extends Builder {
+class PlainBody extends HttpBuilder {
     constructor(data = EMPTY_STRING) {
         super();
         this._body = data;
@@ -24,6 +27,9 @@ class PlainBody extends Builder {
 
     toString() {
         return this._body;
+    }
+    static parseString(data) {
+        return new PlainBody(data.split(HTTP_LINE_BREAK).at(-1));
     }
 }
 

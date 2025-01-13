@@ -1,6 +1,6 @@
-const Builder = require('../builder');
+const { HttpBuilder } = require('./builder');
 
-class ResponseStartLine extends Builder {
+class ResponseStartLine extends HttpBuilder {
     constructor() {
         super();
         this._version = '1.0';
@@ -25,11 +25,12 @@ class ResponseStartLine extends Builder {
     }
 }
 
-class RequestStartLine extends Builder {
-    constructor() {
+class RequestStartLine extends HttpBuilder {
+    constructor(method='GET', uri='/', version='1.0') {
         super();
-        this._method = 'GET';
-        this._version = '1.0';
+        this._method = method;
+        this._uri = uri;
+        this._version = version;
     }
 
     get method() {
@@ -37,6 +38,10 @@ class RequestStartLine extends Builder {
     }
     set method(value) {
         this._method = value;
+    }
+
+    get uri() {
+        return this._uri;
     }
 
     get version() {
@@ -48,6 +53,11 @@ class RequestStartLine extends Builder {
     }
     toString() {
         return `${this._method.toUpperCase()} / HTTP/${this._version}\r\n`;
+    }
+    static parseString(data) {
+        const [method, uri] = data.split(' ');
+        const version = data.match(/HTTP\/(\d\.\d)/).at(0).replace('HTTP/', '');
+        return new RequestStartLine(method, uri, version);
     }
 }
 

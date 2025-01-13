@@ -50,3 +50,7 @@ describe('HttpRequestBuilder building', () => {
         assert.equal(request.toString(), 'POST / HTTP/1.0\r\ncontent-type: application/json\r\n\r\n{"test":"test"}');
     });
 });
+
+describe('HttpRequestBuilder parsing', () => {
+    const request = HttpRequest.parse();  // TODO: implement
+});
