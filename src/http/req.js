@@ -6,11 +6,11 @@ const { HTTP_LINE_BREAK } = require('../constants');
 
 
 class HttpRequest extends HttpBuilder {
-    constructor() {
+    constructor(startLine, headers, body) {
         super();
-        this._startLine = new RequestStartLine();
-        this._headers = new Headers();
-        this._body = new PlainBody();
+        this._startLine = startLine || new RequestStartLine();
+        this._headers = headers || new Headers();
+        this._body = body || new PlainBody();
     }
 
     static parseString(data) {
@@ -47,7 +47,7 @@ class HttpRequest extends HttpBuilder {
     set body(body) {
         if (typeof body === 'string' || (typeof body == 'object' && body instanceof String)) {
             body = new PlainBody(body);
-        } else {
+        } else if (!body instanceof PlainBody && !body instanceof JsonBody) {
             body = new JsonBody(body);
         }
         if (body instanceof PlainBody) {

@@ -28,10 +28,10 @@ describe('HttpRequestBuilder header', () => {
     it('should update existing header', () => {
         const request = new HttpRequest();
         request.setHeader('Content-Type', 'application/json');
-        const prevHeadersAmount = request.headers.asList().length;
+        const prevHeadersAmount = request.headers.toList().length;
         request.setHeader('Content-Type', 'application/xml');
         assert.equal(request.headers.findHeader('content-type').value, 'application/xml');
-        assert.equal(request.headers.asList().length, prevHeadersAmount);
+        assert.equal(request.headers.toList().length, prevHeadersAmount);
     });
 });
 
@@ -47,10 +47,25 @@ describe('HttpRequestBuilder building', () => {
         request.setHeader('Content-Type', 'application/json');
         request.startLine.method = 'POST';
         request.body = new JsonBody({ test: 'test' });
-        assert.equal(request.toString(), 'POST / HTTP/1.0\r\ncontent-type: application/json\r\n\r\n{"test":"test"}');
+        assert.equal(request.toString(), 'POST / HTTP/1.0\r\ncontent-type: application/json\r\ncontent-length: 15\r\n\r\n{"test":"test"}');
     });
 });
 
 describe('HttpRequestBuilder parsing', () => {
-    const request = HttpRequest.parse();  // TODO: implement
+    it('should parse the whole request', () => {
+        const stringHttpRequest = (
+            'GET / HTTP/1.0\r\n' +
+            'Content-Type: application/json\r\n' +
+            'Content-Length: 15\r\n' +
+            '\r\n' +
+            'Hello world'
+        );
+        const request = HttpRequest.parseString(stringHttpRequest);
+        assert.equal(request.body.toString(), 'Hello world');
+        assert.equal(request.headers.findHeader('content-type').value, 'application/json');
+        assert.equal(request.headers.findHeader('content-length').value, '15');
+        assert.equal(request.startLine.method, 'GET');
+        assert.equal(request.startLine.uri, '/');
+        assert.equal(request.startLine.version, '1.0');
+    });
 });
