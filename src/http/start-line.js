@@ -53,6 +53,10 @@ class RequestStartLine extends HttpBuilder {
         return this._url.searchParams;
     }
 
+    get path() {
+        return this._url.pathname;
+    }
+
     asBuffer() {
         return Buffer.from(this.toString());
     }
