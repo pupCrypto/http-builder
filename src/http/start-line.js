@@ -31,6 +31,7 @@ class RequestStartLine extends HttpBuilder {
         this._method = method;
         this._uri = uri;
         this._version = version;
+        this._url = new URL('http://localhost' + uri);  // only for query params
     }
 
     get method() {
@@ -46,6 +47,10 @@ class RequestStartLine extends HttpBuilder {
 
     get version() {
         return this._version;
+    }
+
+    get query() {
+        return this._url.searchParams;
     }
 
     asBuffer() {
